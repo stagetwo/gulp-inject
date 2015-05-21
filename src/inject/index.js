@@ -161,9 +161,13 @@ function getNewContent (target, collection, opt) {
   var targetExt = extname(target.path);
 
   var filesPerTags = groupBy(collection, function (file) {
+    var directoryParts = file.path.split('/');
+    var extensionParts = directoryParts[directoryParts.length - 1].split('.');
+    extensionParts.splice(extensionParts.length - 1, 1);
+    var fileName = extensionParts.join();
     var ext = extname(file.path);
-    var startTag = opt.tags.start(targetExt, ext, opt.starttag);
-    var endTag = opt.tags.end(targetExt, ext, opt.endtag);
+    var startTag = opt.tags.start(targetExt, ext, opt.starttag, fileName);
+    var endTag = opt.tags.end(targetExt, ext, opt.endtag, fileName);
     var tag = startTag + endTag;
     if (!tags[tag]) {
       tags[tag] = {start: startTag, end: endTag};
